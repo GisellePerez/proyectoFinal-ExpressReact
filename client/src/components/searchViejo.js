@@ -20,7 +20,7 @@ class Search extends Component {
 
 
     render() {
-        const items = this.state.items.map(i => <p key={i.id}>{i.title}</p>)
+        const items = this.state.items.map(i => <p id={i.id} key={i.id}>{i.title}</p>)
         return (
           <div className='SearchBox'>  
     

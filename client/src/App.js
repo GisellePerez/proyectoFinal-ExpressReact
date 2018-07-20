@@ -18,7 +18,7 @@ class App extends Component {
       <Router>
         <Switch>
           <Route path="/items" component={Results}/>
-          <Route path="/items/:id" component={Product}/>        
+          <Route exact path="/items/:id" component={Product}/>        
         </Switch> 
         
       </Router>

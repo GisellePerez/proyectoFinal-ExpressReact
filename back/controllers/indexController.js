@@ -1,24 +1,9 @@
 const self = {};
 const axios=require('axios');
 
-// self.items = function(req,res,next){
-//     let query = req.query;
-//     console.log(query);
-//     fetch('https://api.mercadolibre.com/sites/MLA/search?q='+query)
-//         .then(function(response) {
-//             return response.json();
-//         })
-//         .then(function(myJson) {
-//             console.log(myJson);
-//         })
-//         .catch(function(error){
-//             console.log('error')
-//         });
-// }
-
 self.search= function(req, res, next){
-    let query= req.query.q;
-    console.log(query)
+    let query= req.query.search;
+    console.log('linea 6 query',query)
 
     return axios
         .get(`https://api.mercadolibre.com/sites/MLA/search?q=${query}&limit=4`)
@@ -36,10 +21,22 @@ self.search= function(req, res, next){
         .catch(function(e){
             console.log('Error', e)
         })
-    }
+}
 
 self.productDetail = function(req,res,next){
     console.log('estoy en items/id');
+    let query= req.query;
+    console.log('linea 6 query',query)
+
+    return axios
+        .get(`https://api.mercadolibre.com/items/${query}`)
+        .then(response => {
+            console.log(response.data)
+            res.json(response.data.results)
+        })
+        .catch(function(e){
+            console.log('Error', e)
+        })
 }
 
 module.exports = self;

@@ -18,21 +18,24 @@ class Results extends Component {
         // }
         
     componentDidMount() {
-        const a='1';
-        //const search = queryString.parse(this.props.location.search)
-        //console.log('search',search)
-        fetch(`/items?search=${a}`)
+        const searchQuery = queryString.parse(this.props.location.search)
+        console.log('searchQuery',searchQuery)
+        fetch(`/items?search=${searchQuery.search}`)
         //fetch(`/items?q=${document.getElementById('search').value}`)
             .then(res => res.json())
             .then(items => this.setState({ items }))
     }
 
     render() {
-        const items = this.state.items.map(i => <p key={i.id}>{i.title}</p>)
+        
+        const items = this.state.items.map(i => 
+            
+            <p key={i.id}>{i.title}<span>({i.id})</span></p>
+        )
         return (
           <div className='Results'>  
     
-            <p>hola</p>
+            <p>Results</p>
             {items}
 
           </div>
