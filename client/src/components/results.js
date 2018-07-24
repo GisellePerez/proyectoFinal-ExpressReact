@@ -1,39 +1,45 @@
 import React, { Component } from 'react'; 
 import queryString from 'query-string';
 import './../App.css';
-
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'; 
 
 class Results extends Component {
     
     constructor (props) {
         super(props);
-        this.state = { items:[] }
+        this.state = { 
+            search:[],
+            data:{
+                items:[] 
+            }
+        };
     }
     
-    // getItems (e) {
-        //     e.preventDefault();
-        //     fetch(`/items?q=${document.getElementById('search').value}`)
-        //       .then(res => res.json())
-        //       .then(items => this.setState({ items }));
-        // }
-        
     componentDidMount() {
         const searchQuery = queryString.parse(this.props.location.search)
         console.log('searchQuery',searchQuery)
         fetch(`/items?search=${searchQuery.search}`)
-        //fetch(`/items?q=${document.getElementById('search').value}`)
             .then(res => res.json())
-            .then(items => this.setState({ items }))
+            .then(data => this.setState({ data }))
+            .catch(err => console.log('error',err))
     }
 
     render() {
         
-        const items = this.state.items.map(i => 
-            
-            <p key={i.id}>{i.title}<span>({i.id})</span></p>
+        let items = this.state.data.items.map(i => 
+        
+            <div key={i.id} className="product">
+                <figure>
+                    <img src={i.picture}/>
+                </figure>
+                <div className="product_info">
+                    <p>{i.price.currency}{i.price.amount}</p>
+                </div>           
+            </div>
         )
+    
         return (
-          <div className='Results'>  
+            <div className='Results'>  
     
             <p>Results</p>
             {items}

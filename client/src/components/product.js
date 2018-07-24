@@ -5,23 +5,31 @@ class Product extends Component {
 
     constructor (props) {
         super(props);
-        this.state = {items:[]}
+        this.state = { item: {} };
     }
 
-    // componentDidMount() {
-    //     const idQuery = queryString.parse(this.props.location.search)
-    //     console.log('searchQuery',searchQuery)
-    //     fetch(`/items?search=${searchQuery.search}`)
-    //     //fetch(`/items?q=${document.getElementById('search').value}`)
-    //         .then(res => res.json())
-    //         .then(items => this.setState({ items }))
-    // }
+    componentDidMount(){
+        var id= this.props.match.params.id;
+        console.log(id);
+
+        fetch(`/items/${id}`)
+        .then(res => res.json())
+        .then(resp => {this.setState({item:resp.items}) })   
+        .catch(err => console.log('error', err))
+    }
 
     render() {
+        
         return(
-            <div className='Product'>  
-    
+            <div className='Product'> 
+                 
                 <p>Product</p>
+                <figure>
+                    <img src={this.state.item.picture}/>    
+                </figure>                
+                <h3>{this.state.item.title}</h3>
+                <p>{this.state.item.condition}</p>
+                
             </div>
         )
     }
