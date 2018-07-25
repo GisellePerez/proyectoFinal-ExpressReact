@@ -9,7 +9,6 @@ self.search= function(req, res, next){
         .get(`https://api.mercadolibre.com/sites/MLA/search?q=${query}&limit=4`)
         .then(response => {
             return response.data.results
-            //res.json(response.data.results)
         })
         .then(res => res.map(r => {
             return {    
@@ -22,7 +21,8 @@ self.search= function(req, res, next){
                 },
                 'picture':r.thumbnail,
                 'condition':r.condition,
-                'free_shipping': r.shipping.free_shipping               
+                'free_shipping': r.shipping.free_shipping,
+                'location':r.address.state_name
             }
             
         }))
@@ -42,8 +42,7 @@ self.search= function(req, res, next){
 }
 
 self.productDetail = function(req,res,next){
-    console.log('estoy en items/id');
-    let query = req.query;
+    
     let id = req.params.id;
     console.log('linea 6 query',query)
 
@@ -82,5 +81,58 @@ self.productDetail = function(req,res,next){
             console.log('Error', e)
         })
 }
+
+self.item = function(req,res,next){    
+    
+    let id = req.params.id;
+
+    return axios
+        .get('https://api.mercadolibre.com/items/'+id)
+        .then(response => {
+            console.log('axios id',response.data)
+            return response.data
+        })
+    .then(res => {
+        item_final = {
+            'id': res.id,
+            'title': res.title,
+            'price':{
+                'currency': res.currency_id == 'ARS' ? '$' : res.currency_id,
+                'amount': res.price,
+                'decimals': res.currency_id.decimal_places
+            },
+            'picture':res.thumbnail,
+            'condition':res.condition,
+            'sold_quantity':res.sold_quantity
+        }
+        return item_final
+    })
+    .then(detail => {
+        return axios 
+        .get('https://api.mercadolibre.com/items/'+id+'/description')
+        .then(respuesta => respuesta.data)
+        .then(rta => {
+            item_final.description = rta.plain_text;
+            return item_final
+        })
+    })
+    .then(data => {
+        console.log('objeto final:',data)
+        res.json({
+            author:{
+                'name':'Giselle',
+                'lastname': 'Perez'
+            },
+            items: item_final
+        })
+    
+    })
+    
+    .catch(function(e){
+        console.log('Error', e)
+    })
+}
+
+
 
 module.exports = self;

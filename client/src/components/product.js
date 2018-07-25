@@ -28,7 +28,11 @@ class Product extends Component {
                     <img src={this.state.item.picture}/>    
                 </figure>                
                 <h3>{this.state.item.title}</h3>
+                {this.state.item.price && 
+                    <p><span>{this.state.item.price.currency}</span>{this.state.item.price.amount}</p>
+                }
                 <p>{this.state.item.condition}</p>
+                <p>{this.state.item.description}</p>
                 
             </div>
         )

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'; 
 import queryString from 'query-string';
 import './../App.css';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'; 
+import {Link} from 'react-router-dom'; 
 
 class Results extends Component {
     
@@ -27,15 +27,20 @@ class Results extends Component {
     render() {
         
         let items = this.state.data.items.map(i => 
-        
-            <div key={i.id} className="product">
-                <figure>
-                    <img src={i.picture}/>
-                </figure>
-                <div className="product_info">
-                    <p>{i.price.currency}{i.price.amount}</p>
-                </div>           
-            </div>
+
+            <Link to={`/items/${i.id}`}>
+                <div key={i.id} className="product">
+                    <figure>
+                        <img src={i.picture}/>
+                    </figure>
+                    <p>{i.title}</p>
+                    <div className="product_info">
+                    
+                        <p>{i.price.currency}{i.price.amount}</p>
+                    </div>           
+                </div>
+            </Link>
+
         )
     
         return (
@@ -45,6 +50,7 @@ class Results extends Component {
             {items}
 
           </div>
+
         ); 
     }
 }

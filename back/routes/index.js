@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/items', indexController.search );
-router.get('/items/:id',indexController.productDetail);
+router.get('/items/:id',indexController.item);
 
 
 
