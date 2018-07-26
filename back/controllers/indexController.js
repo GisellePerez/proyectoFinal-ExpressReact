@@ -51,30 +51,24 @@ self.search= function(req, res, next){
             return axios
             .get(`https://api.mercadolibre.com/categories/${r.category_id}`)
             .then(category => {
-                console.log ('CATEGORY',category.data.name);
-                console.log('CATEGORY_TOTAL',category.data.total_items_in_this_category);
-
-                //hacer un array con los totales
-                categoriesArr.push(category.data.total_items_in_this_category);
-                console.log('CATEGORIES',categoriesArr);   
-                //recorrer el arreglo y sacar el mayor    
-
-                //cuando tenga el mayor le saco el path from root
-                //retornar ese path from root
-                
-                let categoria = category.data.name; //acá gurdar el mayor solo?
-               //return categoria
-               // itemObj.categories.push(categoria)
-               return categoria
-            }); 
-            
-        }    
-    )
-
-        return Promise.all(promesasCategorias)
+                let categoria = {
+                    name:category.data.name,
+                    total: category.data.total_items_in_this_category,
+                    path: category.data.path_from_root.map(c => name = c.name ) //recorro path y obtengo los nombres de cada una de las categorias
+                }
+                console.log('CATEGORIA: ',categoria)
+                return categoria
+            });
+        })
+        return Promise.all(promesasCategorias) //promise.all para esperar a las categorías antes de mandar el item a la siguiente promesa 
     })    
     .then(categories => {
-        itemObj.categories = categories
+        categories.sort(function(a, b){ //ordeno de mayor a menor 
+            return b.total-a.total
+        })
+        console.log('THIS IS CATEGORIES SORTED: ',categories);        
+        console.log(categories[0].path)
+        itemObj.categories = categories[0]
         return itemObj
     })
     .then(data => {
@@ -83,9 +77,7 @@ self.search= function(req, res, next){
     })
     .catch(function(e){
         console.log('Error', e)
-    })
-
-   
+    })   
 }
 
 self.item = function(req,res,next){    
@@ -97,7 +89,7 @@ self.item = function(req,res,next){
         .then(response => {
             console.log('axios id',response.data)
             return response.data
-        })
+    })
     .then(res => {
         item_final = {
             'id': res.id,
