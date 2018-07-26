@@ -8,10 +8,8 @@ class Results extends Component {
     constructor (props) {
         super(props);
         this.state = { 
-            search:[],
-            data:{
+
                 items:[] 
-            }
         };
     }
     
@@ -20,24 +18,26 @@ class Results extends Component {
         console.log('searchQuery',searchQuery)
         fetch(`/items?search=${searchQuery.search}`)
             .then(res => res.json())
-            .then(data => this.setState({ data }))
+            .then(data => this.setState({ items: data.items }))
             .catch(err => console.log('error',err))
     }
-
+    
     render() {
         
-        let items = this.state.data.items.map(i => 
+        let items = this.state.items.map(i => 
 
-            <Link to={`/items/${i.id}`}>
-                <div key={i.id} className="product">
+            <Link key={i.id} to={`/items/${i.id}`}>
+                <div  className="product">
                     <figure>
                         <img src={i.picture}/>
                     </figure>
                     <p>{i.title}</p>
+                    {i.price &&
                     <div className="product_info">
                     
                         <p>{i.price.currency}{i.price.amount}</p>
-                    </div>           
+                    </div>
+                    }           
                 </div>
             </Link>
 

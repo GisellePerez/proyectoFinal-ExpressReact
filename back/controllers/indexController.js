@@ -1,17 +1,38 @@
 const self = {};
 const axios=require('axios');
 
+// function categories(array) {
+//     let max = array[0]
+//     //en teoria obtengo el mayor
+//     for (var i = 0 ; array.length ; i++){
+//         if(array[i] > max){
+//             max = array[i];
+//         }
+//     }
+//     return max
+// }
+
 self.search= function(req, res, next){
     let query= req.query.search;
     console.log('linea 6 query',query)
+    
+    let itemObj = {
+        author:{
+            'name':'Giselle',
+            'lastname': 'Perez'
+        },
+        categories:[],
+        items: []
+    }
+    
+    let categoriesArr = [];
 
     return axios
         .get(`https://api.mercadolibre.com/sites/MLA/search?q=${query}&limit=4`)
-        .then(response => {
-            return response.data.results
-        })
-        .then(res => res.map(r => {
-            return {    
+        .then(response => response.data.results)
+        .then(resp => {
+            let promesasCategorias = resp.map(r => {
+            let items_list = {    
                 'id': r.id,
                 'title': r.title,
                 'price': {
@@ -25,61 +46,46 @@ self.search= function(req, res, next){
                 'location':r.address.state_name
             }
             
-        }))
-        .then(data => {
-            res.json({
-                author:{
-                    'name':'Giselle',
-                    'lastname': 'Perez'
-                },
-                categories:['categ1','categ2','categ3'],
-                items: data
-            })
-        })
-        .catch(function(e){
-            console.log('Error', e)
-        })
-}
+            itemObj.items.push(items_list)
 
-self.productDetail = function(req,res,next){
-    
-    let id = req.params.id;
-    console.log('linea 6 query',query)
+            return axios
+            .get(`https://api.mercadolibre.com/categories/${r.category_id}`)
+            .then(category => {
+                console.log ('CATEGORY',category.data.name);
+                console.log('CATEGORY_TOTAL',category.data.total_items_in_this_category);
 
-    return axios
-        .get('https://api.mercadolibre.com/items/'+id)
-        .then(response => {
-            console.log('axios id',response.data)
-            return response.data
-        })
-        .then(res => {
-            return {
-                'id': res.id,
-                'title': res.title,
-                'price':{
-                    'currency': res.currency_id == 'ARS' ? '$' : res.currency_id,
-                    'amount': res.price,
-                    'decimals': res.currency_id.decimal_places
-                },
-                'picture':res.thumbnail,
-                'condition':res.condition,
-                'sold_quantity':res.sold_quantity
-            }
-        })
-        .then(data => {
-            console.log('objeto final:',data)
-            res.json({
-                author:{
-                    'name':'Giselle',
-                    'lastname': 'Perez'
-                },
-                items: data
-            })
-        })
-        
-        .catch(function(e){
-            console.log('Error', e)
-        })
+                //hacer un array con los totales
+                categoriesArr.push(category.data.total_items_in_this_category);
+                console.log('CATEGORIES',categoriesArr);   
+                //recorrer el arreglo y sacar el mayor    
+
+                //cuando tenga el mayor le saco el path from root
+                //retornar ese path from root
+                
+                let categoria = category.data.name; //acá gurdar el mayor solo?
+               //return categoria
+               // itemObj.categories.push(categoria)
+               return categoria
+            }); 
+            
+        }    
+    )
+
+        return Promise.all(promesasCategorias)
+    })    
+    .then(categories => {
+        itemObj.categories = categories
+        return itemObj
+    })
+    .then(data => {
+        console.log('ESTO ES DATA',data);
+        return res.json(data)            
+    })
+    .catch(function(e){
+        console.log('Error', e)
+    })
+
+   
 }
 
 self.item = function(req,res,next){    
@@ -132,7 +138,5 @@ self.item = function(req,res,next){
         console.log('Error', e)
     })
 }
-
-
 
 module.exports = self;
