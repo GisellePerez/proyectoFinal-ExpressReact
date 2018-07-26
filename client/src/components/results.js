@@ -1,6 +1,7 @@
 import React, { Component } from 'react'; 
 import queryString from 'query-string';
 import './../App.css';
+import './results.css';
 import {Link} from 'react-router-dom'; 
 
 class Results extends Component {
@@ -18,18 +19,21 @@ class Results extends Component {
         console.log('searchQuery',searchQuery)
         fetch(`/items?search=${searchQuery.search}`)
             .then(res =>  res.json()) 
-            .then(data => this.setState({ items: data.items, categories:data.categories.path }))
+            .then(data => this.setState({ items: data.items, categories:data.categories }))
             .catch(err => console.log('error',err))
     }
 
     render() {
 
-        let items = this.state.items.map(i => 
+        let cat = this.state.categories.map(c => 
+            <p key={c} className="breadcrumb-categories">{c}</p>
+        )
 
+        let items = this.state.items.map(i => 
             <Link key={i.id} to={`/items/${i.id}`}>
                 <div  className="product">
                     <figure>
-                        <img src={i.picture}/>
+                        <img src={i.picture} alt={i.title} />
                     </figure>
                     <p>{i.title}</p>
                     {i.price &&
@@ -39,16 +43,18 @@ class Results extends Component {
                     }           
                 </div>
             </Link>
-
         )
     
         return (
-            <div className='Results'>  
-    
-            <p>Results</p>
-            {items}
-
-          </div>
+            <div className='Results'>      
+                <p>Results</p>
+                <div className="breadcrumb">
+                    {cat}
+                </div>
+                <div className="list">
+                    {items}
+                </div>
+            </div>
 
         ); 
     }

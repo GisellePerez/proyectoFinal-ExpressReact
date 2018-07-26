@@ -1,17 +1,6 @@
 const self = {};
 const axios=require('axios');
 
-// function categories(array) {
-//     let max = array[0]
-//     //en teoria obtengo el mayor
-//     for (var i = 0 ; array.length ; i++){
-//         if(array[i] > max){
-//             max = array[i];
-//         }
-//     }
-//     return max
-// }
-
 self.search= function(req, res, next){
     let query= req.query.search;
     console.log('linea 6 query',query)
@@ -25,8 +14,6 @@ self.search= function(req, res, next){
         items: []
     }
     
-    let categoriesArr = [];
-
     return axios
         .get(`https://api.mercadolibre.com/sites/MLA/search?q=${query}&limit=4`)
         .then(response => response.data.results)
@@ -56,7 +43,7 @@ self.search= function(req, res, next){
                     total: category.data.total_items_in_this_category,
                     path: category.data.path_from_root.map(c => name = c.name ) //recorro path y obtengo los nombres de cada una de las categorias
                 }
-                console.log('CATEGORIA: ',categoria)
+                // console.log('CATEGORIA: ',categoria)
                 return categoria
             });
         })
@@ -66,9 +53,9 @@ self.search= function(req, res, next){
         categories.sort(function(a, b){ //ordeno de mayor a menor 
             return b.total-a.total
         })
-        console.log('THIS IS CATEGORIES SORTED: ',categories);        
-        console.log(categories[0].path)
-        itemObj.categories = categories[0]
+        // console.log('THIS IS CATEGORIES SORTED: ',categories);        
+        // console.log(categories[0].path)
+        itemObj.categories = categories[0].path
         return itemObj
     })
     .then(data => {
