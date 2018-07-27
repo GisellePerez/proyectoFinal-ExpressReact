@@ -14,13 +14,13 @@ class Product extends Component {
 
         fetch(`/items/${id}`)
         .then(res => res.json())
-        .then(resp => {this.setState({item:resp.items })})   
+        .then(resp => {this.setState({item:resp.items})})   
         .catch(err => console.log('error', err))
     }
 
     render() {
 
-        let cat = this.state.item.categories.map(c => 
+        let cate = this.state.categories.map(c => 
             <p key={c} className="breadcrumb-categories">{c}</p>
         )
 
@@ -30,11 +30,14 @@ class Product extends Component {
                 <p>Product</p>
 
                 <div className="breadcrumb">
-                   {cat}
+                {this.state.item.categories &&
+                   <p>{this.state.item.categories[0]}</p>
+                   //<p>{cate}</p>
+                }
                 </div>
 
                 <figure>
-                    <img src={this.state.item.picture}/>    
+                    <img src={this.state.item.picture} alt={this.state.item.title} />    
                 </figure>                
                 <h3>{this.state.item.title}</h3>
                 {this.state.item.price && 
