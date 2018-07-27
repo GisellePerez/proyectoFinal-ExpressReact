@@ -5,25 +5,34 @@ class Product extends Component {
 
     constructor (props) {
         super(props);
-        this.state = { item: {} };
+        this.state = { item: {}, categories:[] };
     }
 
     componentDidMount(){
-        var id= this.props.match.params.id;
+        var id = this.props.match.params.id;
         console.log(id);
 
         fetch(`/items/${id}`)
         .then(res => res.json())
-        .then(resp => {this.setState({item:resp.items}) })   
+        .then(resp => {this.setState({item:resp.items })})   
         .catch(err => console.log('error', err))
     }
 
     render() {
-        
+
+        let cat = this.state.item.categories.map(c => 
+            <p key={c} className="breadcrumb-categories">{c}</p>
+        )
+
         return(
             <div className='Product'> 
-                 
+                
                 <p>Product</p>
+
+                <div className="breadcrumb">
+                   {cat}
+                </div>
+
                 <figure>
                     <img src={this.state.item.picture}/>    
                 </figure>                
