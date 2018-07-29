@@ -42,17 +42,16 @@ class Results extends Component {
                             <p className="title">{i.title}</p>
                         </div>
                         }    
+                        <div>
+                            <p className="location">{i.location}</p>
+                        </div> 
                     </div>      
-                    <div>
-                        <p className="location">{i.location}</p>
-                    </div> 
                 </div>
             </Link>
         )
     
         return (
-            <div className='Results'>      
-                <p>Results</p>
+            <div className='Results'> 
                 <div className="breadcrumb">
                     {cat}
                 </div>

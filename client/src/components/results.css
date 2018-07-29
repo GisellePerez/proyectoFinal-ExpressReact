@@ -20,7 +20,7 @@
 }
 .list .product{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
     border-bottom: 1px solid #EEEEEE;
     padding:2em 0;
@@ -28,7 +28,7 @@
 .product figure{
     width: 180px;
     height:180px; 
-    margin: 0;   
+    margin: 0 4em 0 0;   
 }
 .product img {
     width: 100%;
@@ -36,8 +36,11 @@
     border-radius: 4px;
 }
 .product_info{
+    display: flex;
+    justify-content: space-between;
     text-align:left;
     margin:0 1em 0 0;
+    width: 60%;
 }
 .link-div{
     text-decoration: none;
@@ -57,5 +60,5 @@
     color: #666666;
     text-align: right;
     /*padding-top: 0.5em;*/
-    margin-left: 1em;
+    margin:0 0 0 1em;
 }
