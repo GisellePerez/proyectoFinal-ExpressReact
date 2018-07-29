@@ -35,15 +35,17 @@ class Results extends Component {
                     <figure className="img">
                         <img src={i.picture} alt={i.title} />
                     </figure>
-                    {i.price &&
-                    <div className="product_info">                    
-                        <p className="price">{i.price.currency}{i.price.amount}</p>
-                        <p className="title">{i.title}</p>
-                    </div>
-                    }    
+                    <div className="product_info">
+                        {i.price &&
+                        <div>                    
+                            <p className="price">{i.price.currency}{i.price.amount}</p>
+                            <p className="title">{i.title}</p>
+                        </div>
+                        }    
+                    </div>      
                     <div>
                         <p className="location">{i.location}</p>
-                    </div>       
+                    </div> 
                 </div>
             </Link>
         )
