@@ -100,15 +100,13 @@ self.item = function(req,res,next){
         .then(respuesta => respuesta.data)
         .then(rta => {
             item_final.description = rta.plain_text;
-            //console.log('ITEM FINAL DESDE DESCRIPTION',item_final)
             return item_final
         })
         .then(category_response => {
             return axios
-            .get    (`https://api.mercadolibre.com/categories/${category_response.category_id}`)
+            .get(`https://api.mercadolibre.com/categories/${category_response.category_id}`)
             .then(c_res => c_res.data)
             .then(c_data => {
-                //console.log('CDATA PATH: ',c_data.path_from_root)
                 c_data.path_from_root.map(i=>item_final.categories.push(i.name));
                 return item_final;
             })
@@ -122,7 +120,6 @@ self.item = function(req,res,next){
                 'lastname': 'Perez'
             },
             items: item_final
-
         })    
     })    
     .catch(function(e){
@@ -130,70 +127,4 @@ self.item = function(req,res,next){
     })
 }
 
-
-
-
-//ESTO TRAE EL BJETO SIN DESCRIPCION NI CATEGORIAS PERO TRAE TODO LO DEMAS
-// self.item = function(req,res,next){    
-    
-//     let id = req.params.id;
-
-//     return axios
-//         .get('https://api.mercadolibre.com/items/'+id)
-//         .then(response => {
-//             //console.log('axios id',response.data)
-//             return response.data
-//     })
-//     .then(resp => {
-//         item_final = {
-//             'id': resp.id,
-//             'title': resp.title,
-//             'price':{
-//                 'currency': resp.currency_id == 'ARS' ? '$' : resp.currency_id,
-//                 'amount': resp.price,
-//                 'decimals': resp.currency_id.decimal_places
-//             },
-//             'picture':resp.thumbnail,
-//             'condition':resp.condition,
-//             'sold_quantity':resp.sold_quantity,
-//             'category_id': resp.category_id,    
-//             'categories': []
-//         }
-//         return item_final
-//     })
-//     .then(detail => {
-//         return axios 
-//         .get('https://api.mercadolibre.com/items/'+id+'/description')
-//         .then(respuesta => respuesta.data)
-//             console.log(respuesta.data)
-//         .then(rta => {
-//             item_final.description = rta.plain_text;
-//             console.log('item final con description', item_final)
-//             return item_final
-//         })
-//         .then(category_response => {
-//             return axios
-//             .then(`https://api.mercadolibre.com/categories/${category_response.category_id}`)
-//             .then(c_res => { c_res.data, console.log(c_res.data)})
-//             .then(c_data => {
-//                 c_data.path_from_root.map(i=>item_final.categories.push(i.name));
-//                 console.log('item final desde CATEGORIES :', item_final)
-//                 return item_final;
-//             })
-//         })
-//     })
-//     .then(data => {
-//         console.log('objeto final:',data)
-//         res.json({
-//             author:{
-//                 'name':'Giselle',
-//                 'lastname': 'Perez'
-//             },
-//             items: item_final
-//         })    
-//     })    
-//     .catch(function(e){
-//         console.log('Error', e)
-//     })
-// }
 module.exports = self;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './../App.css';
+import './product.css'
 
 class Product extends Component {
 
@@ -14,38 +15,45 @@ class Product extends Component {
 
         fetch(`/items/${id}`)
         .then(res => res.json())
-        .then(resp => {this.setState({item:resp.items})})   
+        .then(resp => {this.setState({item:resp.items,categories:resp.items.categories}); console.log(this.state)})   
         .catch(err => console.log('error', err))
     }
 
     render() {
 
-        let cate = this.state.categories.map(c => 
-            <p key={c} className="breadcrumb-categories">{c}</p>
+        let categ = this.state.categories.map((c,i) => 
+            <p key={i} className="breadcrumb-categories">{c}<span> > </span></p>
+             
         )
-
+        
         return(
             <div className='Product'> 
-                
-                <p>Product</p>
 
                 <div className="breadcrumb">
-                {this.state.item.categories &&
-                   <p>{this.state.item.categories[0]}</p>
-                   //<p>{cate}</p>
+                
+                {this.state.categories &&
+                   <p>{categ}</p>
                 }
                 </div>
-
-                <figure>
-                    <img src={this.state.item.picture} alt={this.state.item.title} />    
-                </figure>                
-                <h3>{this.state.item.title}</h3>
-                {this.state.item.price && 
-                    <p><span>{this.state.item.price.currency}</span>{this.state.item.price.amount}</p>
-                }
-                <p>{this.state.item.condition}</p>
-                <p>{this.state.item.description}</p>
-                
+                <div className="prod-div">
+                    <div className="first-row">
+                        <figure className="product-pic">
+                            <img src={this.state.item.picture} alt={this.state.item.title} />    
+                        </figure>
+                        <div className="info">
+                            <p className="product-condition">{this.state.item.condition} {this.state.item.sold_quantity} vendidos</p> 
+                            <h3 className="product-title">{this.state.item.title}</h3>
+                            {this.state.item.price && 
+                                <p className="product-price"><span>{this.state.item.price.currency}</span>{this.state.item.price.amount}</p>
+                            }
+                            <input id="buy-btn" type="button" value="Comprar"></input>                    
+                        </div>                
+                    </div>
+                    <div className="second-row">
+                        <h5>Descripción del producto</h5>
+                        <p>{this.state.item.description}</p>
+                    </div>
+                </div>
             </div>
         )
     }

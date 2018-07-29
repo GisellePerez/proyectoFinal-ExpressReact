@@ -26,21 +26,24 @@ class Results extends Component {
     render() {
 
         let cat = this.state.categories.map(c => 
-            <p key={c} className="breadcrumb-categories">{c}</p>
+            <p key={c} className="breadcrumb-categories">{c} <span>></span> </p>
         )
 
         let items = this.state.items.map(i => 
-            <Link key={i.id} to={`/items/${i.id}`}>
+            <Link class="link-div" key={i.id} to={`/items/${i.id}`}>
                 <div  className="product">
-                    <figure>
+                    <figure className="img">
                         <img src={i.picture} alt={i.title} />
                     </figure>
-                    <p>{i.title}</p>
                     {i.price &&
                     <div className="product_info">                    
-                        <p>{i.price.currency}{i.price.amount}</p>
+                        <p className="price">{i.price.currency}{i.price.amount}</p>
+                        <p className="title">{i.title}</p>
                     </div>
-                    }           
+                    }    
+                    <div>
+                        <p className="location">{i.location}</p>
+                    </div>       
                 </div>
             </Link>
         )
